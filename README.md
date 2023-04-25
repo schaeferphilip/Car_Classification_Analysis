@@ -13,7 +13,7 @@ Data analysis of a car dealership's clientele in order to to recommend vehicle m
 >
 > DOUDOU BI TOUVOLY
 >
-> SCHAEFFER PHILLIP
+> SCHAEFER PHILIP
 
 
 # Context and mission
