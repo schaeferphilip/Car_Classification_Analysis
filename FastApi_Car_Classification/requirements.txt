@@ -1,0 +1,7 @@
+scikit_learn==1.2.2
+pandas==1.5.2
+numpy==1.23.3
+Fastapi==0.92.0
+Jinja2==3.0.0
+uvicorn==0.20.0
+python-multipart

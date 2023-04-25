@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Prédiction de véhicules</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+  
+</head>
+
+<body>
+  <div class="row">
+    <div class="mx-auto col-10 col-md-8 col-lg-6">
+      <div id="page" class="text-center my-3">
+        <h1 class="h2 py-2"  >Prédiction de véhicules</h1>
+      </div>
+      <!-- Form to enter new data for predictions  -->
+      <form action="{{ url_for('predict')}}"method="POST" >
+        <input class="form-control" type="number" name="age" placeholder="Age du client" required /><br> 
+        <select class="form-select" name="sexe" required>
+          <option selected>Sexe</option>
+          <option value="Masculin">Masculin</option>
+          <option value="Féminin">Féminin</option>
+        </select> <br>
+        <input class="form-control" type="number" name="taux" placeholder="Taux d'emprunt bancaire" required /><br>
+        <select class="form-select" name="situationFamiliale" required>
+          <option selected>Situation maritale</option>
+          <option value="En Couple">En couple</option>
+          <option value="Célibataire">Célibataire</option>
+        </select> <br>
+        <input class="form-control" type="number" name="nbEnfantsAcharge" placeholder="Nombre d'enfants à charge" required /><br>
+        <select class="form-select" name="VoitureN2" required>
+          <option selected>A un second véhicule ?</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select> <br>
+        <button type="submit" class="btn btn-outline-primary btn-lg col-12">Prédire </button>
+      </form>
+
+      <br>
+      {{ error | safe }} 
+      <div class="my-3 text-center h4">
+        {{ pred_target | safe }}
+      </div>  
+      <div>
+        {{ vehicles | safe }}
+      </div> 
+
+    </div>
+  </div>
+</body>
+</html>
