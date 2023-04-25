@@ -73,10 +73,10 @@ categorical as numerical data. It creates a binary vector for each category, wit
 We thus perform the encoding of the nbPlace, nbGates, occasion and length variables and we also standardize the power variable.
 
 # I- DATA CLUSTERING
-#1- Data Visualization and Interpretation
+# 1- Data Visualization and Interpretation
 Clustering is an unsupervised machine learning technique. It allows to categorize elements according to their similarity or resemblance. There are several algorithms clustering charts. The goal is to find similar characteristics between data and group them. Among these algorithms, we have the K-means, the agglomeration.
 
-# 1-1-K-means
+# 1-1- K-means
 K-means is an algorithm based on centroids, we choose centroids at random and we calculate the distance of the points to the centroids. Each point in the dataset is assigned to the centroid to which it is closest. This technique involves determining the number of centroids in advance. This number represents the number of clusters. However, how to choose the optimal number of clusters?
 Different approaches are possible, in particular the elbow curve and the silhouette curve.
 • Elbow makes it possible to determine the optimal number of clusters over a given interval. A desired cluster value interval is specified and the distance of the points with respect to the variance is calculated. A curve of the possible cluster values and the variance for each value is then drawn. The number of clusters is the part of the curve which forms a bend, that is to say the part where the value of the inertia is the smallest possible. Note that the optimal value depends on us. In general it should not be too big nor too small.
@@ -212,84 +212,61 @@ The inflection point in this case is 4, hence the number of cluster
 
 ![](/media/image23.png)
 
-**We note that the grouping by class was not done according to
-a single variable. Previously, we had a single length per
-class but this is no longer the case.**
+**We notice that the grouping by class was not done according to a single variable. Previously, we had a single length per class but this is no longer the case**
 
 
 ![](/media/image24.png)
 
-All lengths are present in all classes. Eventually,
-we will consider 4 classes of vehicles.
+All lengths are present in all classes. Finally, we will consider 4 classes of vehicles.
 
 # II- CLASSIFICATION AND PREDICTION
 
-After determining the vehicle categories and assigning them
-labels, we will perform a classification based on these
-categories.
+After determining the vehicle categories and assigning labels to them, we will perform a classification based on these categories.
 
 # 1-Classification algorithms
 
-For classification, we used two combined approaches,
-the **grid search** and
-
-the **voting classifier**. The grid search for the search for
-optimal parameters and the
-
-voting classifier for a Learning set (grouping of several
-models).
+For classification, we used two combined approaches, the **grid search** and the **voting classifier**. The grid search for the search for optimal parameters and the voting classifier for a Learning set (grouping of several models).
 
 # 1-1- Search for optimal parameters (grid search)
 
 To do this, we define a class **Trainer** which takes into
-entries the games of
-
-data (train & test) and the models then trains them, displays
-the scores and log them
-
-metrics and model using **MLFLOW**.
+entries the games of data (train & test) and the models then trains them, displays
+the scores and log the metrics and model using **MLFLOW**.
 
 
 ➢Experiment 1
 
 ![](/media/image25.png)
 
-We used the algorithms of Logistic Regression, Random
-Forest, Xgboost and KNN with accuracy and precision metrics. We
-thus obtains the following results:
+We used the Logistic Regression, Random Forest, Xgboost and KNN algorithms with the accuracy and precision metrics. We obtained the following results:
 
 ![](/media/image26.png)
 
-The random Foreste presents better results, then comes the
-Xgboost.
+The random Foreste presents better results, then comes the Xgboost.
 
 
 
 ![](/media/image27.png)
 
 # 1-2-Ensemble Learning (voting classifier)
-We then use the optimal parameters of each model obtained
-thanks to the grid search to carry out the voting classifier.
+Nous utilisons ensuite les paramètres optimaux de chaque modèle obtenus grâce à la grille de recherche pour réaliser le vote classificateur.
 
 ➢Experiment 2
 
 ![](/media/image28.png)
 
-We define each model with its optimal parameters and pass them
-as input in the voting classifier. We get the following results:
+We define each model with its optimal parameters and pass them as input to the voting classifier. We obtain the following results:
 
 
 ![](/media/image29.png)
 
-We have good results but not as good as that of the random forest
-only.
+We have good results but not as good as random forest alone.
 
 ![](/media/image30.png)
 
 # 1-3-Addition of CO2 dataset information
 
-We add the CO2 information in the catalog dataset and
-of registration:
+We add the CO2 information in the catalog and registration data:
 
 ![](/media/image31.png)
 
@@ -299,16 +276,11 @@ Adding new variables did not improve our score.
 
 # 2-Api and customer page
 
-For the use of our model, we have set up an API and
-a Web page. This page is used to collect information
-clients and the api sends them to our model. The result (the
-prediction) of the model is then returned to our API which allows
-our page to display it.
+For the use of our model, we have set up an API and a web page. This page is used to collect information from customers and the api sends it to our model. The result (the prediction) of the model is then returned to our API which allows our page to display it.
 
 ![](/media/apiimg1.png)
 
-This form allows you to enter information about a vehicle. These
-information is then sent to our API.
+This form allows you to enter the information of a vehicle. This information is then sent to our API.
 
 ![](/media/apiimg2.png)
 
@@ -317,18 +289,5 @@ information is then sent to our API.
 
 # Conclusion
 
-In this project, we first look for the number of
-clusters needed to group vehicles. We got 5
-clusters at first but the grouping was done according to a
-only variable, the length. We have added information
-additional in our data to obtain 4 clusters with a
-grouping based on several variables. Secondly, we
-carried out a classification based on
+In this project, we first looked for the number of clusters necessary to group the vehicles. We obtained 5 clusters in a first step but the grouping was done according to only one variable, the length. We added additional information in our data to obtain 4 clusters with a grouping based on several variables. In a second step, we performed a classification based on the use of several machine learning algorithms (ensemble learning) to make our predictions. Finally, we implemented an api and a web page to enter vehicle characteristics and make our predictions based on the user's data. For us, it was a great experience to discover machine learning in several aspects.
 
-on the use of several machine learning algorithms (together
-Learning) to make our predictions. Finally, we implemented
-an API and a web page to enter vehicle characteristics and
-make our predictions based on data from
-
-the user. For us, it was a great experience.
-discover machine learning in several aspects
