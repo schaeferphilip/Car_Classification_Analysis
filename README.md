@@ -65,7 +65,7 @@ the brand the power the length the number of places the number of doors.
 In the field of machine learning, preprocessing or preprocessing in AI designates the different steps performed on the input data before they are introduced into a model. This can include cleaning the data, scaling it, and transforming it in various ways to make it fit the model better. Preprocessing can help improve the performance of a machine learning model by making the data more predictable and easier for the model to use. Here are some common preprocessing techniques:
 • Normalization: This is the process of scaling the data so that it has a mean of 0 and a standard deviation of 1. This can help the model converge faster and can also improve its performance.
 • Standardization: This is a process similar to normalization, but instead of scaling the data to have a standard deviation of 1, it is scaled to
-5
+
 scale to have a standard deviation of 0. This can help the model be more
 robust against outliers in the data.
 • One-hot Encoder: This is a technique used to encode variables
@@ -76,7 +76,7 @@ We thus perform the encoding of the nbPlace, nbGates, occasion and length variab
 #1- Data Visualization and Interpretation
 Clustering is an unsupervised machine learning technique. It allows to categorize elements according to their similarity or resemblance. There are several algorithms clustering charts. The goal is to find similar characteristics between data and group them. Among these algorithms, we have the K-means, the agglomeration.
 
-#1-1-K-means
+# 1-1-K-means
 K-means is an algorithm based on centroids, we choose centroids at random and we calculate the distance of the points to the centroids. Each point in the dataset is assigned to the centroid to which it is closest. This technique involves determining the number of centroids in advance. This number represents the number of clusters. However, how to choose the optimal number of clusters?
 Different approaches are possible, in particular the elbow curve and the silhouette curve.
 • Elbow makes it possible to determine the optimal number of clusters over a given interval. A desired cluster value interval is specified and the distance of the points with respect to the variance is calculated. A curve of the possible cluster values and the variance for each value is then drawn. The number of clusters is the part of the curve which forms a bend, that is to say the part where the value of the inertia is the smallest possible. Note that the optimal value depends on us. In general it should not be too big nor too small.
