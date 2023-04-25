@@ -1,120 +1,13 @@
 # Car_Classification_Analysis
 Data analysis of a car dealership's clientele in order to to recommend vehicle models
 
-# Contexte et mission
-Contactés par un concessionnaire automobile, nous avons pour mission de l'aider à mieux cibler les véhicules susceptibles d'intéresser ses clients. Pour cela il met à notre disposition :
-• son catalogue de véhicules (Catalogue.csv) ;
-• son fichier clients contenant les achats de l'année en cours (Clients.csv - divisé en 2) ;
-• un accès aux informations sur les immatriculations effectuées cette année
-(Immatriculations.csv) ;
-• une brève documentation des données.
-A la fin de ce projet nous devons proposer un outil permettant :
-• d’évaluer en temps réel le type de véhicule le plus susceptible d'intéresser les clients qui se présenteront dans la concession ;
-• d’envoyer une documentation précise sur le véhicule le plus adéquat pour des clients sélectionnés par son service marketing.
-
-# 1- Détection et gestion des anomalies
-Nous avons zéro valeur manquante dans ligne du dataset Catalogue et pas d’anomalie.
-Dans le dataset immatriculation, nous n’avons pas de données manquantes mais plutôt des données dupliquées. Comme ces données ne sont pas nombreuses, nous décidons de les supprimer car une ligne dupliquée n’a pas de sens et ne donne pas assez d’information.
-Les anomalies dans Client sont décrites dans le tableau suivant :
-
-++++++
-
-Nous allons imputer certaines variables et supprimer d’autres
-
-# 2- Compréhension et choix des variables
-
-++++++
-
-Nous une distribution parfaite du nombre de couleur dans le dataset, ce qui veut dire que tous les véhicules dans catalogue sont représentés dans 5 couleurs différentes. Ainsi la couleur n’est pas un facteur de distinction des véhicules car, pour un véhicule donné, nous aurons forcément 5 cinq couleurs. Nous décidons de se faire, de supprimer la couleur comme variable pour notre analyse.
-
-+++
 
 
-Nous avons une forte corrélation entre les variables puissance et prix. Cette forte corrélation peut causer un problème pour notre modèle. De ce fait, nous décidons de supprimer l’une des variables. Ici, nous choisissons de supprimer la variable prix.
-
-+++
-
-Nous remarquons que la plupart des véhicules sont en doublons avec une neuve et l’autre d’occasion. En effet, 40% des véhicules sont d’occasion, le prix des véhicules d’occasion évolue de la même façon que ceux que les voitures neuves mais avec un prix moindre.
-
-# 3- Transformation des variables choisies
-Pour la suite de nos travaux, nous choisissons les variables suivantes :
-la marque la puissance la longueur le nombre de places le nombre de portes.
-Dans le domaine du machine Learning, le prétraitement ou encore preprocessing en AI désigne les différentes étapes effectuées sur les données d'entrée avant qu'elles ne soient introduites dans un modèle. Il peut s'agir de nettoyer les données, de les mettre à l'échelle et de les transformer de diverses manières pour les rendre plus adaptées au modèle. Le prétraitement peut contribuer à améliorer les performances d'un modèle d'apprentissage automatique en rendant les données plus prévisibles et plus faciles à exploiter par le modèle. Voici quelques techniques de prétraitement courantes :
-• La normalisation : Il s'agit du processus de mise à l'échelle des données afin qu'elles aient une moyenne de 0 et un écart type de 1. Cela peut aider le modèle à converger plus rapidement et peut également améliorer ses performances.
-• Standardisation : Il s'agit d'un processus similaire à la normalisation, mais au lieu de mettre à l'échelle les données pour qu'elles aient un écart-type de 1, on les met à
-5
-l'échelle pour qu'elles aient un écart-type de 0. Cela peut aider le modèle à être plus
-robuste face aux valeurs aberrantes des données.
-• One-hot Encoder : Il s'agit d'une technique utilisée pour encoder des variables
-catégorielles en tant que données numériques. Elle crée un vecteur binaire pour chaque catégorie, avec un 1 dans la position correspondant à la catégorie et des 0 dans toutes les autres positions. Cela peut aider le modèle à mieux comprendre les données.
-Nous effectuons ainsi, l’encodage des variables nbPlace, nbPortes, occasion et longueur et nous faisons également la standardisation de la variable puissance.
-
-# I- CLUSTERING DES DONNEES
-# 1- Visualisation des données et interprétation
-Le clustering est une technique d’apprentissage non supervisé en machine Learning. Il permet de catégoriser des éléments en fonction de leur similarité ou ressemblance. Il existe plusieurs algorithmes de clustering. Le but est de trouver les caractéristiques similaires entre données et les regrouper. Parmi ces algorithmes, nous avons le K-means, l’agglomération.
-# 1-1- K-means
-K-means est un algorithme basé sur les centroïdes, l’on choisit des centroïdes au hasard et on calcul la distance des points aux centroïdes. Chaque point du dataset est assigné au centroïde auquel il est le plus proche. Cette technique veut que l’on détermine le nombre de centroïdes à l’avance. Ce nombre représente le nombre de clusters. Cependant, comment choisie le nombre optimal de cluster ?
-Différentes approches sont possibles notamment la courbe elbow et la courbe de silhouette.
-• Elbow permet de déterminer le nombre optimal de cluster sur un intervalle donné. On précise un intervalle de valeur de cluster souhaité et on calcule la distance des points vis-à-vis de la variance. On trace ensuite une courbe des valeurs de cluster possible et de la variance pour chaque valeur. Le nombre de clusters est la partie de la courbe qui forme un coude, c’est-à-dire la partie où la valeur de l’inertie est la plus petite possible. Notons que la valeur optimale dépend de nous. En générales elle ne doit pas être trop grande ni trop petite.
-
-++++
-
-Nous remarquons que la partie de la courbe qui forme un coude se trouve en k=4 et k=6. Essayons donc une autre méthode pour nous rapprocher de la valeur de k qu’il faut.
-• Silhouette
-
-+++
-
-Plus le score est grand, mieux c’est. Avec la méthode silhouette, notre nombre de cluster est k = 5
-
-# 1-2 Agglomérative cluster
-C’est une technique de clustérisation, on départ chaque point est un cluster en lui-même. Ensuite, on calcul la similarité entre tous les points et les points avec la plus forte similarité sont regroupé entre eux pour former un cluster. Répète le processus plusieurs fois jusqu’à ce que tous les points soient dans un seul cluster. On parle alors de classification hiérarchique ascendante.
-
-++++
-
-# 1-3 Aglomérative cluster et Kmeans sur le même graphique
-
-++++++
-
-Avec la méthode Elbow et le score de la silhouette, Kmeans nous fournit toujours k=5. De plus, l'Agglomerative Clustering nous fait supposer 5 clusters à partir du dendrogramme mais indique 6 clusters avec le score de la silhouette.
-
-# 2- Réduction de dimension et visualisation
-
-La réduction de dimension est une technique qui permet de visualiser des données de plusieurs dimensions dans une plus réduite. Notons que cette dimension réduite est une représentation des données originales à un certain pourcentage. Il existe plusieurs techniques de réduction dont la plus célèbre est le PCA (Principal Component Analysis). Nous avons utilisé PCA avec K- means et Agglomérative cluster avec des nombres de cluster différents et voir quel nombre de cluster est plus réaliste en fonction de leur repartion sur les graphique. Nous effectuons des représentations en deux dimensions. Ces deux dimensions expliquent 63.21% des données d’origines.
-
-+++
-
-En visualisant en 2D après une réduction basée sur PCA, le K-Means et l'agglomérative clustering fournissent des résultats assez similaires. Après analyse, nous choisissons k=5 clusters avec le modèle de k-Means car les données y sont mieux regroupées avec PCA.
-
-# 3- Caractéristiquesdesclustersobtenus
-En nous basant sur les techniques présente avec 5 comme nombre de clusters nous présentons les caractéristiques des différentes catégories de véhicules obtenus. Pour l’instant, nous avons labellisé les catégories 0,1,2,3 et 4.
-
-+++++
-
-Nous remarquons que tous les véhicules de la catégorie 0 ont une longueur moyenne, des nombres de portes et de places égale à 5. La puissance est comprise entre 90 et 150. De plus, nous avons des véhicules qui sont d’occasion et une représentation de plusieurs marques. Au vu de ces différentes caractéristiques, nous déduisons que ce sont des véhicules normaux.
-
-+++
-(categorie pics und text)
-
-++++
-
-++++++++
-+++++++++++++
-+++++++++++
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image2.png)
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image1.png)
 
 
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image1.png){width="1.4291666666666667in"
-height="0.4166666666666667in"}
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image2.png){width="1.359721128608924in"
-height="0.7152777777777778in"}
-
-+-----------------------------------------------------------------------+
-| > **Analyse de la clientèle d\'un concessionnaire automobile dans     |
-| > l'objectif de pouvoir recommander des modèles de véhicules**        |
-+=======================================================================+
-+-----------------------------------------------------------------------+
-
-> **[MEMBRE GROUPE 6]{.underline}**
+> **[MEMBRE GROUPE 6]**
 >
 > DIEKE JONATHAN
 >
@@ -122,589 +15,320 @@ height="0.7152777777777778in"}
 >
 > SCHAEFFER PHILLIP
 
-1
 
-INTRODUCTION
+# Context and mission
 
-> **I-** **ANALYSE EXPLORATOIRE DES DONNEES** 1-Détection et gestion des
-> anomalies\
-> 2-Compréhension et choix des variables\
-> 3-Transformation des variables choisies\
-> **II-** **CLUSTERING DES DONNEES**\
-> 1-Etude des méthodes de clustering\
-> 2-Réduction de dimension et visualisation\
-> 3-Caractéristiques des clusters obtenus\
-> 4-Ajout de nouvelles variables\
-> **III-CLASSIFICATION ET PREDICTION**\
-> 1-Les algorithmes de classifications\
-> 2-Api et déploiement
+Contacted by a car dealer, our mission is to help him better target the vehicles likely to interest his customers. For this it provides us with:
 
-CONCLUSION
+• its vehicle catalog (Catalogue.csv);
 
-2
+• its customer file containing purchases for the current year (Customers.csv - divided into 2);
 
-**Contexte et mission**
+• access to information on registrations made this year (Registrations.csv);
 
-Contactés par un concessionnaire automobile, nous avons pour mission de
-l\'aider à mieux cibler les véhicules susceptibles d\'intéresser ses
-clients. Pour cela il met à notre disposition : •son catalogue de
-véhicules (Catalogue.csv) ;\
-•son fichier clients contenant les achats de l\'année en cours
-(Clients.csv - divisé en 2) ; •un accès aux informations sur les
-immatriculations effectuées cette année\
-(Immatriculations.csv) ;\
-•une brève documentation des données.
+• brief documentation of the data.
 
-A la fin de ce projet nous devons proposer un outil permettant :
 
-> •d'évaluer en temps réel le type de véhicule le plus susceptible
-> d\'intéresser les clients qui se présenteront dans la concession ;\
-> •d'envoyer une documentation précise sur le véhicule le plus adéquat
-> pour des clients sélectionnés par son service marketing.
->
-> **1-Détection et gestion des anomalies**
+At the end of this project we must propose a tool allowing:
 
-Nous avons zéro valeur manquante dans ligne du dataset Catalogue et pas
-d'anomalie.
+• evaluate in real time the type of vehicle most likely to interest customers who come to the dealership;
 
-Dans le dataset immatriculation, nous n'avons pas de données manquantes
-mais plutôt des données dupliquées. Comme ces données ne sont pas
-nombreuses, nous décidons de les supprimer car une ligne dupliquée n'a
-pas de sens et ne donne pas assez d'information.
+• to send precise documentation on the most suitable vehicle for customers selected by its marketing department.
 
-Les anomalies dans Client sont décrites dans le tableau suivant :
+# 1- Anomaly detection and management
+We have zero missing values in the row of the Catalog dataset and no anomalies.
+In the registration dataset, we have no missing data but rather duplicate data. As this data is not numerous, we decide to delete it because a duplicate line does not make sense and does not give enough information.
+Anomalies in Client are described in the following table:
 
-+-----------+-----------+-----------+-----------+-----------+-----------+
-| > age     | > Sexe    | > Taux    | situation | > nbEnfan | > 2eme    |
-|           |           |           | Familiale | tsAcharge | > voiture |
-+===========+===========+===========+===========+===========+===========+
-| > 308     | > 310     | > 322     | > 306     | > 316     | > 205     |
-+-----------+-----------+-----------+-----------+-----------+-----------+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/table1.png)
 
-Nous allons imputer certaines variables et supprimer d'autres
+We will impute some variables and remove others
 
-> **2-Compréhension et choix des variables**
+# 2- Understanding and choice of variables
 
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image3.png){width="6.301388888888889in"
-height="2.3722222222222222in"}
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image3.png)
 
-3
+We have a perfect distribution of the number of colors in the dataset, which means that all vehicles in the catalog are represented in 5 different colors. Thus the color is not a factor of distinction of the vehicles because, for a given vehicle, we will inevitably have 5 five colors. We decide to do so, to remove color as a variable for our analysis.
 
-Nous une distribution parfaite du nombre de couleur dans le dataset, ce
-qui veut dire que tous les véhicules dans catalogue sont représentés
-dans 5 couleurs différentes. Ainsi la couleur
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image4.png)
 
-n'est pas un facteur de distinction des véhicules car, pour un véhicule
-donné, nous aurons forcément 5 cinq couleurs. Nous décidons de se faire,
-de supprimer la couleur comme variable pour notre analyse.
 
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image4.png){width="5.151388888888889in"
-> height="3.4319444444444445in"}
+We have a strong correlation between the power and price variables. This strong correlation can cause a problem for our model. Because of this, we decide to delete one of the variables. Here we choose to remove the price variable.
 
-Nous avons une forte corrélation entre les variables **puissance** et
-**prix**. Cette forte corrélation
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image5.png)
 
-peut causer un problème pour notre modèle. De ce fait, nous décidons de
-supprimer l'une des variables. Ici, nous choisissons de supprimer la
-variable prix.
+We notice that most vehicles are duplicates with one new and the other used. Indeed, 40% of vehicles are used, the price of used vehicles evolves in the same way as those of new cars but with a lower price.
 
-4
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image5.png){width="6.301388888888889in"
-height="3.261111111111111in"}
-
-Nous remarquons que la plupart des véhicules sont en doublons avec une
-neuve et l'autre d'occasion. En effet, 40% des véhicules sont
-d'occasion, le prix des véhicules d'occasion évolue de la même façon que
-ceux que les voitures neuves mais avec un prix moindre.
-
-> **3-Transformation des variables choisies**
-
-Pour la suite de nos travaux, nous choisissons les variables suivantes :
-
-**la marquela puissancela longueurle nombre de places le nombre de
-portes.**
-
-Dans le domaine du machine Learning, le prétraitement ou encore
-preprocessing en AI désigne les différentes étapes effectuées sur les
-données d\'entrée avant qu\'elles ne soient introduites dans un modèle.
-Il peut s\'agir de nettoyer les données, de les mettre à l\'échelle et
-de les transformer de diverses manières pour les rendre plus adaptées au
-modèle. Le prétraitement peut contribuer à améliorer les performances
-d\'un modèle d\'apprentissage automatique en rendant les données plus
-prévisibles et plus faciles à exploiter par le modèle. Voici quelques
-techniques de prétraitement courantes :
-
-> •***La normalisation*** : Il s\'agit du processus de mise à l\'échelle
-> des données afin qu\'elles aient une moyenne de 0 et un écart type
-> de 1. Cela peut aider le modèle à converger plus rapidement et peut
-> également améliorer ses performances.
->
-> •***Standardisation*** : Il s\'agit d\'un processus similaire à la
-> normalisation, mais au lieu de mettre à l\'échelle les données pour
-> qu\'elles aient un écart-type de 1, on les met à
-
+# 3- Transformation of chosen variables
+For the rest of our work, we choose the following variables:
+the brand the power the length the number of places the number of doors.
+In the field of machine learning, preprocessing or preprocessing in AI designates the different steps performed on the input data before they are introduced into a model. This can include cleaning the data, scaling it, and transforming it in various ways to make it fit the model better. Preprocessing can help improve the performance of a machine learning model by making the data more predictable and easier for the model to use. Here are some common preprocessing techniques:
+• Normalization: This is the process of scaling the data so that it has a mean of 0 and a standard deviation of 1. This can help the model converge faster and can also improve its performance.
+• Standardization: This is a process similar to normalization, but instead of scaling the data to have a standard deviation of 1, it is scaled to
 5
+scale to have a standard deviation of 0. This can help the model be more
+robust against outliers in the data.
+• One-hot Encoder: This is a technique used to encode variables
+categorical as numerical data. It creates a binary vector for each category, with a 1 in the position corresponding to the category and 0s in all other positions. This can help the model better understand the data.
+We thus perform the encoding of the nbPlace, nbGates, occasion and length variables and we also standardize the power variable.
 
-> l\'échelle pour qu\'elles aient un écart-type de 0. Cela peut aider le
-> modèle à être plus robuste face aux valeurs aberrantes des données.
->
-> •***One-hot Encoder*** : Il s\'agit d\'une technique utilisée pour
-> encoder des variables catégorielles en tant que données numériques.
-> Elle crée un vecteur binaire pour chaque catégorie, avec un 1 dans la
-> position correspondant à la catégorie et des 0 dans toutes les autres
-> positions. Cela peut aider le modèle à mieux comprendre les données.
->
-> Nous effectuons ainsi, l'encodage des variables **nbPlace, nbPortes,
-> occasion et longueur** et nous faisons également la standardisation de
-> la variable **puissance**.
->
-> **I-** **CLUSTERING DES DONNEES**\
-> **1-Visualisation des données et interprétation**
-
-Le clustering est une technique d'apprentissage non supervisé en machine
-Learning. Il permet de catégoriser des éléments en fonction de leur
-similarité ou ressemblance. Il existe plusieurs algorithmes de
-clustering. Le but est de trouver les caractéristiques similaires entre
-données et les regrouper. Parmi ces algorithmes, nous avons le K-means,
-l'agglomération.
-
-**1-1-** **K-means**
-
-K-means est un algorithme basé sur les centroïdes, l'on choisit des
-centroïdes au hasard et on calcul la distance des points aux centroïdes.
-Chaque point du dataset est assigné au centroïde auquel il est le plus
-proche. Cette technique veut que l'on détermine le nombre de centroïdes
-à l'avance. Ce nombre représente le nombre de clusters. Cependant,
-comment choisie le nombre optimal de cluster ?
-
-Différentes approches sont possibles notamment la courbe **elbow** et la
-courbe de **silhouette**.
-
-> •**Elbow** permet de déterminer le nombre optimal de cluster sur un
-> intervalle donné. On précise un intervalle de valeur de cluster
-> souhaité et on calcule la distance des points vis-à-vis de la
-> variance. On trace ensuite une courbe des valeurs de cluster possible
-> et de la variance pour chaque valeur. Le nombre de clusters est la
-> partie de la courbe qui forme un coude, c'est-à-dire la partie où la
-> valeur de l'inertie est la plus petite possible. Notons que la valeur
-> optimale dépend de nous. En générales elle ne doit pas être trop
-> grande ni trop petite.
-
-6
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image6.png){width="3.4611111111111112in"
-height="1.7166666666666666in"}
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image7.png){width="3.1625in"
-> height="2.0944444444444446in"}
-
-Nous remarquons que la partie de la courbe qui forme un coude se trouve
-en **k=4 et k=6.** Essayons donc une autre méthode pour nous rapprocher
-de la valeur de **k** qu'il faut.
-
-> •Silhouette
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image8.png){width="4.633333333333334in"
-> height="3.301388888888889in"}
->
-> Plus le score est **grand,** mieux c'est. Avec la méthode silhouette,
-> notre nombre de cluster est k = 5\
-> **1-2 Agglomérative cluster**
-
-7
-
-> C'est une technique de clustérisation, on départ chaque point est un
-> cluster en lui-même.
->
-> Ensuite, on calcul la similarité entre tous les points et les points
-> avec la plus forte similarité
->
-> sont regroupé entre eux pour former un cluster. Répète le processus
-> plusieurs fois jusqu'à
->
-> ce que tous les points soient dans un seul cluster. On parle alors de
-> classification
->
-> hiérarchique ascendante.
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image9.png){width="5.916666666666667in"
-height="2.9430555555555555in"}
-
-> **1-3 Aglomérative cluster et Kmeans sur le même graphique**
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image10.png){width="6.301388888888889in"
-height="3.091666666666667in"}
-
-Avec la méthode Elbow et le score de la silhouette, Kmeans nous fournit
-toujours k=5. De plus, l\'Agglomerative Clustering nous fait supposer 5
-clusters à partir du dendrogramme mais indique 6 clusters avec le score
-de la silhouette.
-
-8
-
-> **2-Réduction de dimension et visualisation**
->
-> La réduction de dimension est une technique qui permet de visualiser
-> des données de plusieurs dimensions dans une plus réduite. Notons que
-> cette dimension réduite est une représentation des données originales
-> à un certain pourcentage. Il existe plusieurs techniques de réduction
-> dont la plus célèbre est le **PCA (*Principal Component Analysis*).**
-> Nous avons utilisé **PCA avec K-means et Agglomérative** cluster avec
-> des nombres de cluster différents et voir quel nombre de cluster est
-> plus réaliste en fonction de leur repartion sur les graphique. Nous
-> effectuons des représentations en deux dimensions. Ces deux dimensions
-> expliquent **63.21%** des données d'origines.
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image11.png){width="6.579166666666667in"
-> height="1.620832239720035in"}
-
-*Figure 1 PCA avec K-means*
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image12.png){width="6.301388888888889in"
-> height="1.5527777777777778in"}
->
-> *Figure 2 PCA avec agglomérative cluster*
->
-> En visualisant en 2D après une réduction basée sur PCA, le K-Means et
-> l\'agglomérative clustering fournissent des résultats assez
-> similaires. Après analyse, nous choisissons **k=5** clusters avec le
-> modèle de k-Means car les données y sont mieux regroupées avec PCA.
->
-> **3-Caractéristiques des clusters obtenus**
->
-> En nous basant sur les techniques présente avec 5 comme nombre de
-> clusters nous présentons les caractéristiques des différentes
-> catégories de véhicules obtenus. Pour l'instant, nous avons labellisé
-> les catégories **0,1,2,3 et 4.**
-
-9
-
-**[Pour la catégorie 0 :]{.underline}**
+# I- DATA CLUSTERING
+#1- Data Visualization and Interpretation
+Clustering is an unsupervised machine learning technique. It allows to categorize elements according to their similarity or resemblance. There are several algorithms clustering charts. The goal is to find similar characteristics between data and group them. Among these algorithms, we have the K-means, the agglomeration.
 
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image13.png){width="6.437498906386701in"
-height="3.473611111111111in"}
-
-Nous remarquons que tous les véhicules de la catégorie **0** ont une
-longueur **moyenne**, des nombres de portes et de places égale à **5.**
-La puissance est comprise entre **90 et 150.** De plus, nous avons des
-véhicules qui sont d'occasion et une représentation de plusieurs
-marques. Au vu de ces différentes caractéristiques, nous déduisons que
-ce sont des **véhicules normaux.**
-
-**[Pour la catégorie 1 :]{.underline}**
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image14.png){width="6.597221128608924in"
-height="1.858332239720035in"}
-
-Ce sont des voitures très longues dont la puissance est comprise entre
-**193 et 272.** Nous n\'avons que deux voitures qui ne sont pas
-d'occasion. Nous pouvons dire que ce sont de **vieux véhicules.**
-
-10
-
-**[Pour la categorie 2 :]{.underline}**
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image15.png){width="6.301388888888889in"
-height="4.590277777777778in"}
-
-Ce sont des véhicules longs avec des places allant jusqu'à **7** et une
-puissance comprise entre 102 et 197. Elles sont également disponibles en
-**occasion** avec des prix proportionnels à la puissance. Nous déduisons
-que ce sont des **véhicules de famille.**
-
-**[Pour la catégorie 3 :]{.underline}**
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image16.png){width="6.301388888888889in"
-height="3.0263877952755904in"}
-
-11
-
-Ce sont des véhicules de très petites tailles avec une puissance
-maximale égale à **115.** Disponible en neuf et en occasion avec 3
-portes le plus souvent. Nous pouvons dire que ce sont des voitures
-**citadines,** généralement pour une personne.
-
-**[Pour la catégorie 4 :]{.underline}**
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image17.png){width="6.301388888888889in"
-height="1.4319444444444445in"}
-
-Ce sont des voitures avec une puissance minimale de 306 et allant
-jusqu'à 507. Nous n'avons que 4 véhicules dans cette catégorie. Leur
-rareté, leur prix et leur puissance nous font dire que ce sont des
-**véhicules de luxe.** Au final, nous avons obtenus 5 catégorie de
-véhicule qui sont :
-
-+-----------------------------------+-----------------------------------+
-| > \-\                             | > normaux\                        |
-| > -\                              | > vieux\                          |
-| > -\                              | > citadines\                      |
-| > -\                              | > familles\                       |
-| > -                               | > luxe                            |
-+===================================+===================================+
-+-----------------------------------+-----------------------------------+
-
-**Tout le travail précédent s\'est effectué sans tenir compte des
-informations dans le dataset CO2. La regroupement des véhicules s\'est
-fait le plus sur la variable longueur.**
-
-**4-Ajout de nouvelle variables**
-
-Dans la suite, nous avons ajouté des informations supplémentaires sur
-les données de catalogue et immatriculation (bonus-malus, coût et
-énergie, rejetco2). En procédant comme précent nous avons les graphismes
-suivants :
-
-4-1- **Agglomérative cluster**
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image18.png){width="5.5055555555555555in"
-> height="2.584721128608924in"}
->
-> On obtient un nombre de cluster égale à 4
-
-12
-
-**4-2-Evolution de l'inertie**
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image19.png){width="5.616666666666666in"
-> height="2.786111111111111in"}
-
-Le point d'inflexion dans ce cas est 4, d'où le nombre de cluster
-
-**4-3-Présentation des classes**\
-➢Classe 0
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image20.png){width="6.301388888888889in"
-> height="4.2375in"}
-
-13
-
-> ➢**Classe 1**
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image21.png){width="6.301388888888889in"
-> height="1.5208333333333333in"}
->
-> ➢**Classe 2**
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image22.png){width="6.301388888888889in"
-> height="2.547222222222222in"}
->
-> ➢**Classe 3**
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image23.png){width="6.301388888888889in"
-> height="2.025in"}
-
-**Nous remarquons que le regroupement par classe ne s'est pas fait selon
-une seule variable. Précédemment, nous avions une longueur unique par
-classe mais ce n'est plus le cas.**
-
-14
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image24.png){width="6.301388888888889in"
-height="3.1263877952755905in"}
-
-Toutes les longueurs sont présentes dans toutes les classes. Finalement,
-nous considérerons 4 classes de véhicules.
-
-> **II-** **CLASSIFICATION ET PREDICTION**
->
-> Après avoir déterminé les catégories de véhicule et leur attribuer des
-> labels, nous allons effectuer une classification basée sur ces
-> catégories.
->
-> **1-Les algorithmes de classifications**
->
-> Pour la classification, nous avons utilisé deux approches combinées,
-> le **grid search** et
->
-> le **voting classifier**. Le grid search pour la recherche de
-> paramètres optimaux et le
->
-> voting classifier pour un ensemble Learning (regroupement de plusieurs
-> modèles).
->
-> **1-1-** **Recherche de paramètres optimaux (grid search)**
->
-> Pour ce faire, nous définissons une classe **Trainer** qui prend en
-> entrées les jeux de
->
-> données (train & test) et les modèles ensuite les entraîne, affiche
-> les scores et logue les
->
-> métriques et model grâce à **MLFLOW**.
-
-15
-
-> ➢**Expérience 1**
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image25.png){width="6.624998906386701in"
-> height="2.0388888888888888in"}
->
-> Nous avons utilisé les algorithmes de Logistic Regression, de Random
-> Forest, Xgboost et KNN avec les métriques de accuracy et precision. On
-> obtient ainsi les résultats suivants :
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image26.png){width="2.3291666666666666in"
-> height="3.576388888888889in"}
->
-> Le random Foreste présente de meilleurs résultats, ensuite vient le
-> Xgboost.
-
-16
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image27.png){width="6.301388888888889in"
-> height="2.2666655730533685in"}
->
-> **1-2-Ensemble Learning (voting classifier)**\
-> Nous utilisons ensuite les paramètres optimaux de chaque modèle obtenu
-> grâce au grid search pour effectuer le voting classifier.
->
-> ➢**Expérience 2**
->
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image28.png){width="6.301388888888889in"
-> height="3.661110017497813in"}
->
-> On définit chaque modèle avec ses paramètres optimaux et on les passe
-> en entrée dans le voting classifier. On obtient les résultats suivants
-> :
-
-17
-
-> ![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image29.png){width="6.301388888888889in"
-> height="1.2486111111111111in"}
-
-Nous avons de bons résultats mais pas autant que celui du random forest
-seul.
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image30.png){width="6.301388888888889in"
-height="1.7888877952755906in"}
-
-> **1-3-Ajout des information du dataset CO2**
-
-Nous ajoutons les information de CO2 dans le dataset de catalogue et
-d'immatriculation :
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image31.png){width="5.088888888888889in"
-height="2.25in"}
-
-L'ajout de nouvelles variable n'a pas amélioré notre score.
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image32.png){width="6.301388888888889in"
-height="1.8166666666666667in"}
-
-**2-Api et page client**
-
-18
-
-![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image33.png){width="1.2027777777777777in"
-height="1.332001312335958in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image34.png){width="1.9736111111111112in"
-height="1.661988188976378in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image35.png){width="1.1180555555555556in"
-height="0.8861373578302713in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image36.png){width="0.8486111111111111in"
-height="0.8188353018372704in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image37.png){width="4.791666666666667in"
-height="2.5833333333333335in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image38.png){width="9.722222222222222e-2in"
-height="8.333333333333333e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image39.png){width="3.6166666666666667in"
-height="2.171817585301837in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image40.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image41.png){width="9.722222222222222e-2in"
-height="8.333333333333333e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image42.png){width="0.125in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image43.png){width="4.1666666666666664e-2in"
-height="6.944444444444445e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image44.png){width="0.1111111111111111in"
-height="8.333333333333333e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image45.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image46.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image47.png){width="4.1666666666666664e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image48.png){width="4.1666666666666664e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image49.png){width="4.1666666666666664e-2in"
-height="6.944444444444445e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image50.png){width="0.1111111111111111in"
-height="6.944444444444445e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image51.png){width="6.944444444444445e-2in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image52.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image53.png){width="6.944444444444445e-2in"
-height="6.944444444444445e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image54.png){width="3.672221128608924in"
-height="2.9177799650043745in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image55.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image56.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image57.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image58.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image59.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image60.png){width="9.722222222222222e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image61.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image62.png){width="9.722222222222222e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image63.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image64.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image65.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image66.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image67.png){width="8.333333333333333e-2in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image68.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image69.png){width="9.722222222222222e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image70.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image71.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image72.png){width="5.555555555555555e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image73.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image74.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image75.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image76.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image77.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image78.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image79.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image80.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image81.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image82.png){width="4.1666666666666664e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image83.png){width="5.555555555555555e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image84.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image85.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image86.png){width="0.1388888888888889in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image87.png){width="6.944444444444445e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image88.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image89.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image90.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image91.png){width="8.333333333333333e-2in"
-height="4.1666666666666664e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image92.png){width="8.333333333333333e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image93.png){width="8.333333333333333e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image94.png){width="8.333333333333333e-2in"
-height="5.555555555555555e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image95.png){width="6.944444444444445e-2in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image96.png){width="6.944444444444445e-2in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image97.png){width="6.944444444444445e-2in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image98.png){width="0.2361111111111111in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image99.png){width="0.1527777777777778in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image100.png){width="0.3333333333333333in"
-height="9.722222222222222e-2in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image101.png){width="0.2222222222222222in"
-height="0.1111111111111111in"}![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image102.png){width="0.3194444444444444in"
-height="8.333333333333333e-2in"}
-
-> Pour l'utilisation de notre modèle, nous avons mis en place une API et
-> une page web. Cette page est utilisée pour recueillir les informations
-> des clients et l'api les envoie dans notre modèle. Le résultat (la
-> prédiction) du modèle est ensuite retourné à notre API qui permet à
-> notre page de l'afficher
->
-> .
-
-Ce formulaire permet de rentrer les informations d'un véhicule. Ces
-informations sont ensuite
-
-envoyées à notre API.
-
-> Client : Model
->
-> **HTML**
->
-> **Résultats**\
-> 19
-
-**Conclusion**
-
-Dans ce projet, nous avons dans un premier temps chercher le nombre de
-clusters nécessaire pour regrouper les véhicules. Nous avons obtenu 5
-clusters dans un premier temps mais le groupement était fait selon une
-seule variable, la longueur. Nous avons ajouté des informations
-supplémentaires dans nos données pour obtenir 4 clusters avec un
-regroupement basé sur plusieurs variables. Dans un second temps, nous
-avons effectué une classification qui reposait
-
-sur l'utilisation de plusieurs algorithmes de machine Learning (ensemble
-Learning) pour effectuer nos prédictions. Enfin, nous avons mis en place
-une api et une page web pour entrer des caractéristiques de véhicules et
-effectuer nos prédictions en fonction des données de
-
-l'utilisateur. Pour notre part, ce fut une très belle expérience de
-découvrir le machine Learning dans plusieurs aspects
-
-20
+#1-1-K-means
+K-means is an algorithm based on centroids, we choose centroids at random and we calculate the distance of the points to the centroids. Each point in the dataset is assigned to the centroid to which it is closest. This technique involves determining the number of centroids in advance. This number represents the number of clusters. However, how to choose the optimal number of clusters?
+Different approaches are possible, in particular the elbow curve and the silhouette curve.
+• Elbow makes it possible to determine the optimal number of clusters over a given interval. A desired cluster value interval is specified and the distance of the points with respect to the variance is calculated. A curve of the possible cluster values and the variance for each value is then drawn. The number of clusters is the part of the curve which forms a bend, that is to say the part where the value of the inertia is the smallest possible. Note that the optimal value depends on us. In general it should not be too big nor too small.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image6.png)
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image7.png)
+
+We notice that the part of the curve which forms an elbow is at k=4 and k=6. So let's try another method to get closer to the value of k that we need.
+• Silhouette
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image8.png)
+
+The higher the score, the better. With the silhouette method, our cluster number is k = 5
+
+# 1-2 Agglomerative cluster
+It is a clustering technique, we start each point is a cluster in itself. Then, we calculate the similarity between all the points and the points with the strongest similarity are grouped together to form a cluster. Repeat the process several times until all the points are in a single cluster. This is called ascending hierarchical classification.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image9.png)
+
+#1-3 Agglomerative cluster and Kmeans on the same chart
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image10.png)
+
+With the Elbow method and the silhouette score, Kmeans always gives us k=5. Also, Agglomerative Clustering makes us assume 5 clusters from the dendrogram but shows 6 clusters with the silhouette score.
+
+#2- Dimension reduction and visualization
+
+Dimension reduction is a technique for visualizing data from multiple dimensions into a smaller one. Note that this reduced dimension is a representation of the original data at a certain percentage. There are several reduction techniques, the most famous of which is PCA (Principal Component Analysis). We used PCA with K-means and Agglomerative cluster with different cluster numbers and see which cluster number is more realistic based on their distribution on the graphs. We make representations in two dimensions. These two dimensions explain 63.21% of the original data.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image11.png)
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image12.png)
+
+Visualizing in 2D after PCA-based reduction, K-Means and agglomerative clustering provide quite similar results. After analysis, we choose k=5 clusters with the k-Means model because the data are better grouped there with PCA.
+
+# 3- Characteristics of the clusters obtained
+Based on the techniques presented with 5 as the number of clusters, we present the characteristics of the different categories of vehicles obtained. For now, we have labeled categories 0,1,2,3 and 4.
+
+**[For category 0:]**
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image13.png)
+
+We notice that all the vehicles of category **0** have a
+**average** length, number of doors and seats equal to **5.**
+The power is between **90 and 150.** In addition, we have
+vehicles that are used and a representation of several
+brands. In view of these different characteristics, we deduce that
+these are **normal vehicles.**
+
+**[For category 1:]**
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image14.png)
+
+They are very long cars whose power is between
+**193 and 272.** We only have two cars that are not
+second hand. We can say that these are **old vehicles.**
+
+
+**[For category 2:]**
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image15.png)
+
+These are long vehicles with seats up to **7** and a
+power between 102 and 197. They are also available in
+**used** with prices proportional to the power.
+
+We deduce
+that they are **family vehicles.**
+
+**[For category 3:]**
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image16.png)
+
+
+They are very small vehicles with a power
+maximum equal to **115.** Available new and used with 3
+doors most often. We can say these are cars
+**city cars,** generally for one person.
+
+**[For category 4:]**
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image17.png)
+
+These are cars with a minimum horsepower of 306 and ranging
+up to 507. We only have 4 vehicles in this category. Their
+rarity, their price and their power make us say that they are
+**luxury vehicles.** In the end, we obtained 5 categories of
+vehicle that are:
+
+- normal
+- old
+- city cars
+- families
+- luxury 
+
+
+**All previous work has been done without taking into account the
+information in the CO2 dataset. The grouping of vehicles has
+does the most on the length variable.**
+
+
+# 4-Add new variables
+
+In the following, we have added additional information about
+catalog and registration data (bonus-malus, cost and
+energy, rejectionco2). By proceeding as above we have the graphics
+following:
+
+# 4-1- Agglomerative cluster
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image18.png)
+We obtain a number of clusters equal to 4
+
+
+# 4-2-Evolution of inertia
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image19.png)
+
+The inflection point in this case is 4, hence the number of cluster
+
+# 4-3-Presentation of classes
+➢Class 0
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image20.png)
+
+➢Class 1
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image21.png)
+
+➢Class 2
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image22.png)
+➢Class 3
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image23.png)
+
+**We note that the grouping by class was not done according to
+a single variable. Previously, we had a single length per
+class but this is no longer the case.**
+
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image24.png)
+
+All lengths are present in all classes. Eventually,
+we will consider 4 classes of vehicles.
+
+# II- CLASSIFICATION AND PREDICTION
+
+After determining the vehicle categories and assigning them
+labels, we will perform a classification based on these
+categories.
+
+# 1-Classification algorithms
+
+For classification, we used two combined approaches,
+the **grid search** and
+
+the **voting classifier**. The grid search for the search for
+optimal parameters and the
+
+voting classifier for a Learning set (grouping of several
+models).
+
+# 1-1- Search for optimal parameters (grid search)
+
+To do this, we define a class **Trainer** which takes into
+entries the games of
+
+data (train & test) and the models then trains them, displays
+the scores and log them
+
+metrics and model using **MLFLOW**.
+
+
+➢Experiment 1
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image25.png)
+
+We used the algorithms of Logistic Regression, Random
+Forest, Xgboost and KNN with accuracy and precision metrics. We
+thus obtains the following results:
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image26.png)
+
+The random Foreste presents better results, then comes the
+Xgboost.
+
+
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image27.png)
+
+# 1-2-Ensemble Learning (voting classifier)
+We then use the optimal parameters of each model obtained
+thanks to the grid search to carry out the voting classifier.
+
+➢Experiment 2
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image28.png)
+
+We define each model with its optimal parameters and pass them
+as input in the voting classifier. We get the following results:
+
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image29.png)
+
+We have good results but not as good as that of the random forest
+only.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image30.png)
+
+# 1-3-Addition of CO2 dataset information
+
+We add the CO2 information in the catalog dataset and
+of registration:
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image31.png)
+
+Adding new variables did not improve our score.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/image32.png)
+
+# 2-Api and customer page
+
+For the use of our model, we have set up an API and
+a Web page. This page is used to collect information
+clients and the api sends them to our model. The result (the
+prediction) of the model is then returned to our API which allows
+our page to display it.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/apiimg1.png)
+
+This form allows you to enter information about a vehicle. These
+information is then sent to our API.
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/apiimg2.png)
+
+![](vertopal_fc93e65cc22749faa93b9dc6765d4317/media/apiimg3.png)
+
+
+# Conclusion
+
+In this project, we first look for the number of
+clusters needed to group vehicles. We got 5
+clusters at first but the grouping was done according to a
+only variable, the length. We have added information
+additional in our data to obtain 4 clusters with a
+grouping based on several variables. Secondly, we
+carried out a classification based on
+
+on the use of several machine learning algorithms (together
+Learning) to make our predictions. Finally, we implemented
+an API and a web page to enter vehicle characteristics and
+make our predictions based on data from
+
+the user. For us, it was a great experience.
+discover machine learning in several aspects
